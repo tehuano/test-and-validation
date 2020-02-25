@@ -165,7 +165,7 @@ void procesar_seleccionar_producto(state_t *estado, state_t *estado_int) {
             case SELECT_PB:
             case SELECT_PC:
                 if (obtener_confirmacion() == 1) {
-                    if (ejecutar_compra(estado, estado_int) == 1) {
+                    if (ejecutar_compra(estado, estado_int, producto) == 1) {
                         en_ejecucion = 0;
                     }
                 }
@@ -380,8 +380,24 @@ int obtener_opcion_ingresar_pago() {
     return menu;
 }
 
+/* realiza la lógica de compra de producto y actualización del estado */
 int ejecutar_compra(state_t *estado, state_t *estado_int) {
-    int ret = 0;
+    int ret = 0, costo = 0;
+    if (!estado_int) return 0;
+    /* verifica qué producto se está tratando de comprar */
+    if (1 == estado_int->pa) {
+        costo = COST_PA;
+    } else if (1 == estado_int->pb) {
+        costo = COST_PB;
+    } else if (1 == estado_int->pc) {
+        costo = COST_PC;
+    }
+    /* verifica si se puede pagar el producto con el dinero ingresado */
+    if (es_pagable(estado_int, costo) == 1) {
+        /* si es posible el estado intermedio cambia. Después, se acutliza el estado */
+        actulizar_estado(estado, estado_int);
+        ret = 1;
+    }
     return ret;
 }
 
