@@ -53,13 +53,11 @@ int find_min_coins(int denom[], int num_denom, int final_amount)
 }
 
 // Driver program to test above function 
-int main() 
-{ 
+int main() {
     int i, j; 
     int arr[] = {1, 2, 3}; 
     int m = sizeof(arr)/sizeof(arr[0]);
-
-    find_min_coins(arr, m, 4); 
+    find_min_coins(arr, m, 15); 
     getchar(); 
     return 0; 
 } 
