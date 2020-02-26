@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_INT_VALUE 10000000
+
 #define COST_PA 12
 #define COST_PB 17
 #define COST_PC 23
@@ -23,6 +25,7 @@
 #define COST_COIN_A 1
 #define COST_COIN_B 5
 #define COST_COIN_C 10
+
 #define COST_BILL_A 20
 #define COST_BILL_B 50
 #define COST_BILL_C 100
@@ -54,6 +57,8 @@
 #define ADMIN_DONE      5
 
 #define clear() printf("\033[H\033[J")
+
+int denominaciones[] = {1, 5, 10, 20, 50, 100, 200};
 
 typedef struct {
     char pa;
@@ -91,6 +96,9 @@ void mostrar_cantidad(state_t *);
 void agregar_dinero(state_t *, state_t *);
 /* lógica de ejecución de compras */
 int ejecutar_compra(state_t *, state_t *);
+/* lógica para saber el cambio que se dará al cliente */
+unsigned char es_pagable(state_t *estado, state_t *estado_int, int costo);
+int find_min_coins(int denom[], int num_denom, int final_amount);
 
 int main() {
     int en_ejecucion = 1;
@@ -156,16 +164,25 @@ void procesar_administrar(state_t *estado) {
 /* procesa las opciones de selección de producto */
 void procesar_seleccionar_producto(state_t *estado, state_t *estado_int) {
     char en_ejecucion = 1;
+    int producto = 0;
     while (1 == en_ejecucion) {
         clear();
         mostrar_productos(estado);
         mostrar_cantidad(estado_int);
-        switch(obtener_opcion_seleccionar_producto()) {
+        producto = obtener_opcion_seleccionar_producto();
+        switch(producto){
             case SELECT_PA:
             case SELECT_PB:
             case SELECT_PC:
+                if (SELECT_PA == producto) {
+                    estado_int->pa = 1;
+                } else if (SELECT_PB == producto) {
+                    estado_int->pb = 1;
+                } else if (SELECT_PC == producto) {
+                    estado_int->pc = 1;
+                }
                 if (obtener_confirmacion() == 1) {
-                    if (ejecutar_compra(estado, estado_int, producto) == 1) {
+                    if (ejecutar_compra(estado, estado_int) == 1) {
                         en_ejecucion = 0;
                     }
                 }
@@ -384,6 +401,7 @@ int obtener_opcion_ingresar_pago() {
 int ejecutar_compra(state_t *estado, state_t *estado_int) {
     int ret = 0, costo = 0;
     if (!estado_int) return 0;
+
     /* verifica qué producto se está tratando de comprar */
     if (1 == estado_int->pa) {
         costo = COST_PA;
@@ -393,11 +411,24 @@ int ejecutar_compra(state_t *estado, state_t *estado_int) {
         costo = COST_PC;
     }
     /* verifica si se puede pagar el producto con el dinero ingresado */
-    if (es_pagable(estado_int, costo) == 1) {
-        /* si es posible el estado intermedio cambia. Después, se acutliza el estado */
-        actulizar_estado(estado, estado_int);
+    if (es_pagable(estado, estado_int, costo) == 1) {
+        /* Si es posible el estado intermedio cambia. 
+         * Después, se acutliza el estado
+         */
+        //actulizar_estado(estado, estado_int);
         ret = 1;
     }
+    return ret;
+}
+
+/* verifica si la compra se puede realizar,
+ * identifica el cambio a retornar
+ */
+unsigned char es_pagable(state_t *estado, state_t *estado_int, int costo) {
+    unsigned char ret = 0x00;
+    int final_amount = 15;
+    int m = sizeof(denominaciones)/sizeof(denominaciones[0]);
+    find_min_coins(denominaciones, m, final_amount);
     return ret;
 }
 
@@ -473,4 +504,44 @@ void limpiar_estado_productos(state_t *estado) {
     estado->pa = 0;
     estado->pb = 0;
     estado->pc = 0;
+}
+
+
+int find_min_coins(int denom[], int num_denom, int final_amount) {
+    /*Array for storing the minimum number of coins for an amount*/
+    int *min_num_coins = (int*) malloc( (final_amount+1) * sizeof(int));
+     
+    /*Array for storing the coin denomination chosen for an amount*/
+    int *chosen_denom = (int*) malloc( (final_amount+1) * sizeof(int));
+    int i, cur_amt, smaller_amt, result;
+         
+    min_num_coins[0] = 0;
+    for (cur_amt = 1; cur_amt <= final_amount; cur_amt++) {
+        min_num_coins[cur_amt] = MAX_INT_VALUE;
+        for (i = 0; i < num_denom; ++i) {
+            if (denom[i] <= cur_amt) {
+         
+                smaller_amt = cur_amt - denom[i];
+ 
+                if ((1 + min_num_coins[smaller_amt]) < min_num_coins[cur_amt]) {
+                    min_num_coins[cur_amt] = 1 + min_num_coins[smaller_amt];
+                    chosen_denom[cur_amt] = denom[i];
+                }
+            }
+        }
+    }
+     
+    result = min_num_coins[final_amount];
+    printf("Minimum number of coins = %d\n", result);
+ 
+    /*print the chosen denominations to get the final amount*/
+    cur_amt = final_amount;
+    while (cur_amt > 0) {
+        printf("%d ", chosen_denom[cur_amt]);
+        cur_amt = cur_amt - chosen_denom[cur_amt];
+    }
+    printf(" = %d\n", final_amount);
+    free(min_num_coins);
+    free(chosen_denom);
+    return result;
 }

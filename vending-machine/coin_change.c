@@ -9,8 +9,23 @@ num_denom: number of denominations
 final_amount: amount for which change has to be obtained
 Return value: Minimum number of coins needed to represent final_amount
 */
-int find_min_coins(int denom[], int num_denom, int final_amount) 
-{
+
+int find_min_coins(int denom[], int num_denom, int final_amount);
+
+// Driver program to test above function 
+int main() {
+    int i, j; 
+    int arr[] = {1, 2, 3}; 
+    int final_amount = 15;
+
+    int m = sizeof(arr)/sizeof(arr[0]);
+    find_min_coins(arr, m, final_amount);
+    
+    getchar(); 
+    return 0; 
+}
+ 
+int find_min_coins(int denom[], int num_denom, int final_amount) {
     /*Array for storing the minimum number of coins for an amount*/
     int *min_num_coins = (int*) malloc( (final_amount+1) * sizeof(int));
      
@@ -26,10 +41,8 @@ int find_min_coins(int denom[], int num_denom, int final_amount)
          
                 smaller_amt = cur_amt - denom[i];
  
-                if (1 + min_num_coins[smaller_amt] < 
-                        min_num_coins[cur_amt]) {
-                    min_num_coins[cur_amt] = 
-                        1 + min_num_coins[smaller_amt];
+                if ((1 + min_num_coins[smaller_amt]) < min_num_coins[cur_amt]) {
+                    min_num_coins[cur_amt] = 1 + min_num_coins[smaller_amt];
                     chosen_denom[cur_amt] = denom[i];
                 }
             }
@@ -46,18 +59,7 @@ int find_min_coins(int denom[], int num_denom, int final_amount)
         cur_amt = cur_amt - chosen_denom[cur_amt];
     }
     printf(" = %d\n", final_amount);
- 
     free(min_num_coins);
     free(chosen_denom);
     return result;
 }
-
-// Driver program to test above function 
-int main() {
-    int i, j; 
-    int arr[] = {1, 2, 3}; 
-    int m = sizeof(arr)/sizeof(arr[0]);
-    find_min_coins(arr, m, 15); 
-    getchar(); 
-    return 0; 
-} 
