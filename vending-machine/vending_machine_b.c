@@ -790,7 +790,7 @@ void procesar_cancelar_compra(state_t *estado, state_t *estado_int) {
     limpiar_estado_productos(estado_int);
 
     ret = encontrar_cambio(m, cantidad, estado_int, &l_cambio, &l_size);
-    if (ret != ZERO && ret != MAX_INT_VALUE) {
+    if (ret != MAX_INT_VALUE) {
         mostrar_cambio(estado, cantidad, l_cambio, l_size, 1);
         /*print the chosen denominations to get the final amount*/
         /*
