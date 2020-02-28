@@ -32,18 +32,20 @@ int find_min_coins(int denom[], int num_denom, int final_amount) {
     /*Array for storing the coin denomination chosen for an amount*/
     int *chosen_denom = (int*) malloc( (final_amount+1) * sizeof(int));
     int i, cur_amt, smaller_amt, result;
-         
+    int ex[] = {100,100,2};
+ 
     min_num_coins[0] = 0;
     for (cur_amt = 1; cur_amt <= final_amount; cur_amt++) {
         min_num_coins[cur_amt] = MAX_INT_VALUE;
         for (i = 0; i < num_denom; ++i) {
-            if (denom[i] <= cur_amt) {
+            if (ex[i] > 0 && (denom[i] <= cur_amt)) {
          
                 smaller_amt = cur_amt - denom[i];
  
                 if ((1 + min_num_coins[smaller_amt]) < min_num_coins[cur_amt]) {
                     min_num_coins[cur_amt] = 1 + min_num_coins[smaller_amt];
                     chosen_denom[cur_amt] = denom[i];
+                    ex[i]--;
                 }
             }
         }
@@ -54,9 +56,11 @@ int find_min_coins(int denom[], int num_denom, int final_amount) {
  
     /*print the chosen denominations to get the final amount*/
     cur_amt = final_amount;
-    while (cur_amt > 0) {
+    int counter = 0;
+    while (cur_amt > 0 && counter < (final_amount + 1)) {
         printf("%d ", chosen_denom[cur_amt]);
         cur_amt = cur_amt - chosen_denom[cur_amt];
+        counter++;
     }
     printf(" = %d\n", final_amount);
     free(min_num_coins);
