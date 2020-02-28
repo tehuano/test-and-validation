@@ -116,6 +116,10 @@ void procesar_cancelar_compra();
 void quitar_moneda(state_t *s, int moneda);
 /* identifica si la cantidad está en rango para dinero */
 int en_rango(int x, int max);
+/* mostrar cambio a los clientes */
+void mostrar_cambio(state_t *estado, int cambio, int *l_cambio, int l_csize, int flag); 
+/* detiene momentaneamente el programa */
+void presionar_tecla_para_continuar();
 
 int main() {
     int en_ejecucion = 1;
@@ -126,7 +130,7 @@ int main() {
     limpiar_estado_dinero(&estado_usuario);
     limpiar_estado_productos(&estado_usuario);
     while(1 == en_ejecucion) {
-        //clear();
+        clear();
         mostrar_productos(&estado);
         mostrar_cantidad(&estado_usuario);
         switch(obtener_opcion_menu_principal()){
@@ -148,6 +152,7 @@ int main() {
             break;
         default:
             printf("Elegir otra opción. Use 1 - 9\n");
+            presionar_tecla_para_continuar();
             break;
         }
     }
@@ -161,7 +166,7 @@ void procesar_administrar(state_t *estado) {
     limpiar_estado_dinero(&estado_admin);    
     limpiar_estado_productos(&estado_admin);    
     while(1 == en_ejecucion) {
-        //clear();
+        clear();
         mostrar_productos(estado);
         mostrar_dinero(estado);
         switch(obtener_opcion_administrar(estado)) {
@@ -201,12 +206,12 @@ void procesar_seleccionar_producto(state_t *estado, state_t *estado_int, int mod
         delta = -1;
     }
     while (1 == en_ejecucion) {
-        //clear();
+        clear();
         if (UNO == modo) {
             mostrar_productos(estado);
             mostrar_cantidad(estado_tmp);
         } else if (TRES == modo || DOS == modo) {
-            mostrar_dinero(estado);
+            mostrar_productos(estado);
         }
         producto = obtener_opcion_seleccionar_producto();
         switch(producto){
@@ -222,6 +227,7 @@ void procesar_seleccionar_producto(state_t *estado, state_t *estado_int, int mod
                     }
                 } else {
                     printf("Cantidad fuera de rango para Producto A.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case SELECT_PB:
@@ -236,6 +242,7 @@ void procesar_seleccionar_producto(state_t *estado, state_t *estado_int, int mod
                     }
                 } else {
                     printf("Cantidad fuera de rango para Producto B.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case SELECT_PC:
@@ -250,6 +257,7 @@ void procesar_seleccionar_producto(state_t *estado, state_t *estado_int, int mod
                     }
                 } else {
                     printf("Cantidad fuera de rango para Producto C.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case SELECT_DONE:
@@ -280,7 +288,7 @@ void procesar_ingresar_dinero(state_t *estado, state_t *estado_int, int modo) {
         limpiar_estado_dinero(estado_int);
     }
     while(1 == en_ejecucion) {
-        //clear();
+        clear();
         if (UNO == modo) {
             mostrar_productos(estado);
             mostrar_cantidad(&estado_local);
@@ -295,6 +303,7 @@ void procesar_ingresar_dinero(state_t *estado, state_t *estado_int, int modo) {
                     estado_tmp->coina += delta;
                 } else {
                     printf("Cantidad fuera de rango para monedas tipo A.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case IN_COIN_B:
@@ -304,6 +313,7 @@ void procesar_ingresar_dinero(state_t *estado, state_t *estado_int, int modo) {
                     estado_tmp->coinb += delta;
                 } else {
                     printf("Cantidad fuera de rango para monedas tipo B.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case IN_COIN_C:
@@ -313,6 +323,7 @@ void procesar_ingresar_dinero(state_t *estado, state_t *estado_int, int modo) {
                     estado_tmp->coinc += delta;
                 } else {
                     printf("Cantidad fuera de rango para monedas tipo C.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case IN_BILL_A:
@@ -322,6 +333,7 @@ void procesar_ingresar_dinero(state_t *estado, state_t *estado_int, int modo) {
                     estado_tmp->billa += delta;
                 } else {
                     printf("Cantidad fuera de rango para Billete A.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case IN_BILL_B:
@@ -331,6 +343,7 @@ void procesar_ingresar_dinero(state_t *estado, state_t *estado_int, int modo) {
                     estado_tmp->billb += delta;
                 } else {
                     printf("Cantidad fuera de rango para Billete B.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case IN_BILL_C:
@@ -340,6 +353,7 @@ void procesar_ingresar_dinero(state_t *estado, state_t *estado_int, int modo) {
                     estado_tmp->billc += delta;
                 } else {
                     printf("Cantidad fuera de rango para Billete C.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case IN_BILL_D:
@@ -349,6 +363,7 @@ void procesar_ingresar_dinero(state_t *estado, state_t *estado_int, int modo) {
                     estado_tmp->billd += delta;
                 } else {
                     printf("Cantidad fuera de rango para Billete D.\n");
+                    presionar_tecla_para_continuar();
                 }
                 break;
             case MONEY_RETURN:
@@ -461,7 +476,7 @@ int obtener_opcion_menu_principal() {
     int status = ZERO;
     char tmp = ZERO;
     int menu = ZERO;
-    printf("====== Menú Principal ======\n");
+    printf("\n====== Menú Principal ======\n");
     printf("1. Ingresar Dinero\n");
     printf("2. Elegir Producto\n");
     printf("3. Cancelar Compra\n");
@@ -482,7 +497,7 @@ int obtener_opcion_seleccionar_producto() {
     int status = ZERO;
     char tmp = ZERO;
     int menu = ZERO;
-    printf("=== Seleccionar Producto ===\n");
+    printf("\n=== Seleccionar Producto ===\n");
     printf("1. Producto A\n");
     printf("2. Producto B\n");
     printf("3. Producto C\n");
@@ -585,19 +600,7 @@ unsigned char es_pagable(state_t *estado, state_t *estado_int, int costo) {
         result = encontrar_cambio(m, cambio, &estado_local, &l_cambio, &l_csize);
         if (result != ZERO && result != MAX_INT_VALUE) {
             agregar_dinero_estados(estado, estado_int);
-            /*print the chosen denominations to get the final amount*/
-            cur_amt = cambio;
-            printf("Su cambio.\n");
-            while (cur_amt > ZERO && (contador < l_csize)) {
-                if (l_cambio[cur_amt] > COST_COIN_C) {
-                    printf("Billete de: $%d \n", l_cambio[cur_amt]);
-                } else {
-                    printf("Moneda de: $%d \n", l_cambio[cur_amt]);
-                }
-                quitar_moneda(estado, l_cambio[cur_amt]);
-                cur_amt = cur_amt - l_cambio[cur_amt];
-                contador = contador + 1;
-            }
+            mostrar_cambio(estado, cambio, l_cambio, l_csize, 1);
             /* limpiar el estado actual y quitar el producto */
             if (l_cambio) {
                 free(l_cambio);
@@ -608,11 +611,39 @@ unsigned char es_pagable(state_t *estado, state_t *estado_int, int costo) {
             ret = 0x01;
         } else {
             printf("No es posible dar cambio. Ingrese cantidad exacta.\n");
+            presionar_tecla_para_continuar();
         }
     } else {
         printf("No se puede realizar la compra. Ingrese suficiente dinero.\n");
+        presionar_tecla_para_continuar();
     }
     return ret;
+}
+/* mostrar el cambio al usuario */
+void mostrar_cambio(state_t *estado, int cambio, int *l_cambio, int l_csize, int flag) {
+    int cur_amt = cambio;
+    int contador = 0;
+    printf("Su cambio: $%d\n", cambio);
+    while (cur_amt > ZERO && (contador < l_csize)) {
+        if (l_cambio[cur_amt] > COST_COIN_C) {
+            printf("Dar Billete de: $%d \n", l_cambio[cur_amt]);
+        } else {
+            printf("Dar Moneda de: $%d \n", l_cambio[cur_amt]);
+        }
+        if (1 == flag) {
+            quitar_moneda(estado, l_cambio[cur_amt]);
+        }
+        cur_amt = cur_amt - l_cambio[cur_amt];
+        contador = contador + 1;
+    }
+    presionar_tecla_para_continuar();
+}
+
+void presionar_tecla_para_continuar() {
+    char ch;
+    printf("Presione una tecla para continuar ...");
+    ch = getchar();
+    if (ch == '\n') ch = getchar();
 }
 
 /* quitar moneda del estado general, después de dar cambio */
@@ -665,6 +696,7 @@ void cargar_estado(state_t *estado_vending) {
     if(archivo) fclose(archivo);
 }
 
+/* salva el estado de la vending machine */
 void guardar_estado(state_t *estado) {
     FILE *fileName;
     fileName = fopen("estado.dat","w");
@@ -743,7 +775,9 @@ void procesar_cancelar_compra(state_t *estado, state_t *estado_int) {
 
     ret = encontrar_cambio(m, cantidad, estado_int, &l_cambio, &l_size);
     if (ret != ZERO && ret != MAX_INT_VALUE) {
+        mostrar_cambio(estado, cantidad, l_cambio, l_size, 1);
         /*print the chosen denominations to get the final amount*/
+        /*
         cur_amt = cantidad;
         printf("Su cambio.\n");
         while (cur_amt > ZERO && (contador < l_size)) {
@@ -756,6 +790,7 @@ void procesar_cancelar_compra(state_t *estado, state_t *estado_int) {
             cur_amt = cur_amt - l_cambio[cur_amt];
             contador = contador + 1;
         }
+        */
         if (l_cambio) {
             free(l_cambio);
         }
