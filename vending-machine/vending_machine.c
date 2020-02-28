@@ -120,6 +120,8 @@ int en_rango(int x, int max);
 void mostrar_cambio(state_t *estado, int cambio, int *l_cambio, int l_csize, int flag); 
 /* detiene momentaneamente el programa */
 void presionar_tecla_para_continuar();
+/* calcular la cantidad mínima de mownedas si existe */
+void cargar_existencia(state_t *s, int ex[]);
 
 int main() {
     int en_ejecucion = 1;
@@ -598,7 +600,7 @@ unsigned char es_pagable(state_t *estado, state_t *estado_int, int costo) {
         agregar_dinero_estados(&estado_local, estado);
         agregar_dinero_estados(&estado_local, estado_int);
         result = encontrar_cambio(m, cambio, &estado_local, &l_cambio, &l_csize);
-        if (result != ZERO && result != MAX_INT_VALUE) {
+        if (result != MAX_INT_VALUE) {
             agregar_dinero_estados(estado, estado_int);
             mostrar_cambio(estado, cambio, l_cambio, l_csize, 1);
             /* limpiar el estado actual y quitar el producto */
@@ -737,16 +739,20 @@ void limpiar_estado_productos(state_t *estado) {
 int encontrar_cambio(int num_denom, int cantidad_f, state_t *estado, int **l_cambio, int *l_csize) {
     int *min_num_coins = (int*) malloc( (cantidad_f+1) * sizeof(int));
     int *chosen_denom = (int*) malloc( (cantidad_f+1) * sizeof(int));
+    int ex[] = {0,0,0,0,0,0,0};
     int i, cur_amt, smaller_amt, result;
+    cargar_existencia(estado,ex);
+    //for (i=0;i<7;i++) printf("%d\n", ex[i]);
     min_num_coins[ZERO] = ZERO;
     for (cur_amt = 1; cur_amt <= cantidad_f; cur_amt++) {
         min_num_coins[cur_amt] = MAX_INT_VALUE;
         for (i = ZERO; i < num_denom; ++i) {
-            if (denominaciones[i] <= cur_amt) {
+            if ((ex[i] > 0) && (denominaciones[i] <= cur_amt)) {
                 smaller_amt = cur_amt - denominaciones[i];
                 if ((1 + min_num_coins[smaller_amt]) < min_num_coins[cur_amt]) {
                     min_num_coins[cur_amt] = 1 + min_num_coins[smaller_amt];
                     chosen_denom[cur_amt] = denominaciones[i];
+                    ex[i]--;
                 }
             }
         }
@@ -763,6 +769,16 @@ int encontrar_cambio(int num_denom, int cantidad_f, state_t *estado, int **l_cam
     return result;
 }
 
+void cargar_existencia(state_t *s, int ex[]) {
+    ex[0] = s->coina;
+    ex[1] = s->coinb;
+    ex[2] = s->coinc;
+    ex[3] = s->billa;
+    ex[4] = s->billb;
+    ex[5] = s->billc;
+    ex[6] = s->billd;
+}
+
 /* utilizada para devolver cambio */
 void procesar_cancelar_compra(state_t *estado, state_t *estado_int) {
     int cantidad, ret, l_size, cur_amt, contador = 0;
@@ -774,7 +790,7 @@ void procesar_cancelar_compra(state_t *estado, state_t *estado_int) {
     limpiar_estado_productos(estado_int);
 
     ret = encontrar_cambio(m, cantidad, estado_int, &l_cambio, &l_size);
-    if (ret != ZERO && ret != MAX_INT_VALUE) {
+    if (ret != MAX_INT_VALUE) {
         mostrar_cambio(estado, cantidad, l_cambio, l_size, 1);
         /*print the chosen denominations to get the final amount*/
         /*
