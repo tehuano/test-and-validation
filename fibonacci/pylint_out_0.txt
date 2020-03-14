@@ -1,0 +1,139 @@
+************* Module fibonacci_lint
+C:  7, 0: Trailing whitespace (trailing-whitespace)
+C:  7, 0: Unnecessary parens after 'if' keyword (superfluous-parens)
+C:  7, 0: No space allowed before :
+    if (n <= 1) : 
+                ^ (bad-whitespace)
+C:  9, 0: Trailing whitespace (trailing-whitespace)
+C:  9, 0: Unnecessary parens after 'if' keyword (superfluous-parens)
+C:  9, 0: No space allowed before :
+    if (n <= 3) : 
+                ^ (bad-whitespace)
+C: 11, 0: Trailing whitespace (trailing-whitespace)
+C: 11, 0: Unnecessary parens after 'if' keyword (superfluous-parens)
+C: 11, 0: No space allowed before :
+    if (n % 2 == 0 or n % 3 == 0) : 
+                                  ^ (bad-whitespace)
+C: 14, 0: Unnecessary parens after 'while' keyword (superfluous-parens)
+C: 15, 0: Unnecessary parens after 'if' keyword (superfluous-parens)
+C: 41, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C: 41, 0: Exactly one space required after comma
+    print("%d %ld %d" % (x,f,es_primo(f)))
+                          ^ (bad-whitespace)
+C: 41, 0: Exactly one space required after comma
+    print("%d %ld %d" % (x,f,es_primo(f)))
+                            ^ (bad-whitespace)
+C: 46, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:  1, 0: Missing module docstring (missing-docstring)
+W:  6,13: Redefining name 'n' from outer scope (line 20) (redefined-outer-name)
+C:  6, 0: Invalid argument name "n" (invalid-name)
+C:  6, 0: Missing function docstring (missing-docstring)
+C: 20, 0: Invalid constant name "n" (invalid-name)
+C: 22, 4: Invalid constant name "n" (invalid-name)
+C: 25, 0: Invalid constant name "start" (invalid-name)
+C: 26, 0: Invalid constant name "f1" (invalid-name)
+C: 27, 0: Invalid constant name "f2" (invalid-name)
+C: 28, 0: Invalid constant name "f" (invalid-name)
+C: 30, 0: Invalid constant name "x" (invalid-name)
+C: 34, 8: Invalid constant name "f" (invalid-name)
+C: 36, 8: Invalid constant name "f" (invalid-name)
+C: 38, 8: Invalid constant name "f" (invalid-name)
+C: 39, 8: Invalid constant name "f1" (invalid-name)
+C: 40, 8: Invalid constant name "f2" (invalid-name)
+C: 42, 4: Invalid constant name "x" (invalid-name)
+C: 45, 0: Invalid constant name "end" (invalid-name)
+
+
+Report
+======
+35 statements analysed.
+
+Statistics by type
+------------------
+
++---------+-------+-----------+-----------+------------+---------+
+|type     |number |old number |difference |%documented |%badname |
++=========+=======+===========+===========+============+=========+
+|module   |1      |1          |=          |0.00        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|class    |0      |0          |=          |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|method   |0      |0          |=          |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|function |1      |1          |=          |0.00        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+
+
+
+Raw metrics
+-----------
+
++----------+-------+------+---------+-----------+
+|type      |number |%     |previous |difference |
++==========+=======+======+=========+===========+
+|code      |36     |76.60 |36       |=          |
++----------+-------+------+---------+-----------+
+|docstring |0      |0.00  |0        |=          |
++----------+-------+------+---------+-----------+
+|comment   |4      |8.51  |4        |=          |
++----------+-------+------+---------+-----------+
+|empty     |7      |14.89 |7        |=          |
++----------+-------+------+---------+-----------+
+
+
+
+Duplication
+-----------
+
++-------------------------+------+---------+-----------+
+|                         |now   |previous |difference |
++=========================+======+=========+===========+
+|nb duplicated lines      |0     |0        |=          |
++-------------------------+------+---------+-----------+
+|percent duplicated lines |0.000 |0.000    |=          |
++-------------------------+------+---------+-----------+
+
+
+
+Messages by category
+--------------------
+
++-----------+-------+---------+-----------+
+|type       |number |previous |difference |
++===========+=======+=========+===========+
+|convention |32     |32       |=          |
++-----------+-------+---------+-----------+
+|refactor   |0      |0        |=          |
++-----------+-------+---------+-----------+
+|warning    |1      |1        |=          |
++-----------+-------+---------+-----------+
+|error      |0      |0        |=          |
++-----------+-------+---------+-----------+
+
+
+
+Messages
+--------
+
++---------------------+------------+
+|message id           |occurrences |
++=====================+============+
+|invalid-name         |15          |
++---------------------+------------+
+|superfluous-parens   |7           |
++---------------------+------------+
+|bad-whitespace       |5           |
++---------------------+------------+
+|trailing-whitespace  |3           |
++---------------------+------------+
+|missing-docstring    |2           |
++---------------------+------------+
+|redefined-outer-name |1           |
++---------------------+------------+
+
+
+
+Global evaluation
+-----------------
+Your code has been rated at 0.57/10 (previous run: 0.57/10, +0.00)
+

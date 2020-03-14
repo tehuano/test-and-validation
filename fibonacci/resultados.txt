@@ -1,0 +1,7 @@
+6428193.09235 microseconds
+5969483.13713 microseconds
+6091908.21648 microseconds
+6380558.96759 microseconds
+6465977.19193 microseconds
+
+promedio = 6267224.121096 microseconds
