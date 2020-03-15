@@ -127,7 +127,7 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
 
     \subsection{Requisitos Funcionales}
     \begin{functional}
-     % \requirement{name}{description}{priority}
+     % format \requirement{name}{description}{priority}
      \requirement{fr1}
 		  {Cada llave debe ser usada por una sola función criptográfica}
       {The HSM ensures that each cryptographic key is only used for a single cryptographic function and only for its intended purpose.}
@@ -135,16 +135,16 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
     
      \requirement{fr2}
 		  {Cálculo de resumen (\textit{hash}) de mensajes}
-      {Descripción breve y objetiva.}
+      {permite la generación y verificación firmas digitales hash y adicionalmente HMAC.}
       {Importante}
 			
      \requirement{fr3}
-      {Cifrado asimétrico de mensajes}
+      {Cifrador asimétrico}
       {Descripción breve y objetiva.}
       {Importante}
 			
      \requirement{fr4}
-      {Cifrado simétrico de mensajes}
+      {Cifrador simétrico}
       {Descripción breve y objetiva.}
       {Importante}
 			

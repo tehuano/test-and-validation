@@ -40,10 +40,10 @@ def fibonacci(val_n):
             fibo = fibo_1 + fibo_2
             fibo_1 = fibo_2
             fibo_2 = fibo
-        print "%d %ld %d" % (iter_n, fibo, es_primo(fibo))
+        print("{} {} {}".format(iter_n, fibo, es_primo(fibo)))
         iter_n = iter_n +1
     end = time.time()
-    print 1000000 * (end - start)
+    print(1000000 * (end - start))
 
 if len(sys.argv) >= 2:
     fibonacci(int(sys.argv[1]))
