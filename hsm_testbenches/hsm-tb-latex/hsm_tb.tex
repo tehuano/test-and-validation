@@ -263,8 +263,25 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
 		{Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
   \end{dependencies}  
 
+\section{Análisis estático con herramientas Lint}
+
+ What Verilator Does
+Verilator is invoked with parameters similar to GCC or Synopsys’s VCS. It "Verilates" the specified synthesizable Verilog or SystemVerilog code by reading it, performing lint checks, and optionally inserting assertion checks and coverage-analysis points. It outputs single- or multi-threaded .cpp and .h files, the "Verilated" code.
+
+The user writes a little C++/SystemC wrapper file, which instantiates the "Verilated" model of the user’s top level module. These C++/SystemC files are then compiled by a C++ compiler (gcc/clang/MSVC++). The resulting executable performs the design simulation. Verilator also supports linking its generated libraries, optionally encrypted, into other simulators.
+
+Verilator may not be the best choice if you are expecting a full featured replacement for NC-Verilog, VCS or another commercial Verilog simulator, or if you are looking for a behavioral Verilog simulator e.g. for a quick class project (we recommend Icarus Verilog for this.) However, if you are looking for a path to migrate synthesizable Verilog to C++ or SystemC, and your team is comfortable writing just a touch of C++ code, Verilator is the tool for you.
+
+go to https://www.veripool.org/projects/verilator/wiki/Installing
+
+  \begin{figure}[h]
+    \includegraphics[width=0.6\linewidth]{pictures/uvm.png}
+    \label{uvm_tb}
+  \end{figure}
+		
 % Optional bibliography section
 % To use bibliograpy, first provide the ipprocess.bib file on the root folder.
+\newpage
 \bibliographystyle{ieeetr}
 \bibliography{bibliography}
 
