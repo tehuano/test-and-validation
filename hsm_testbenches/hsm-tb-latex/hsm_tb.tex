@@ -8,6 +8,7 @@
 % \usepackage{longtable}
 \usepackage[utf8]{inputenc} 
 \usepackage[spanish]{babel} % Uncomment for portuguese
+\usepackage{pgfgantt}
 
 \sloppy
 
@@ -57,7 +58,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introducción}
 
-\subsection{Vista Geral del Documento}
+\subsection{Vista General del Documento}
 En este documento se redacta la información necesaria para realizar las pruebas al módulo hardware para seguridad basado en el estándar~\cite{1059-1993-std:1994}.
 
   \begin{itemize}
@@ -77,7 +78,7 @@ En este documento se redacta la información necesaria para realizar las pruebas
           \hline
           \cellcolor[gray]{0.9}\textbf{Término} & \cellcolor[gray]{0.9}\textbf{Descripción} \\ \hline
           Requisitos Funcionales & Requisitos que hacen funcional al sistema, son las capacidades que debe tener el sistema entregado.  \\ \hline
-					Requisitos Técnicos & Requisitos del sistema que definen características referentes a técnicas, algoritmos, tecnologías y especificidades de los requerimientos funcionales.  \\ \hline
+                    Requisitos Técnicos & Requisitos del sistema que definen características referentes a técnicas, algoritmos, tecnologías y especificidades de los requerimientos funcionales.  \\ \hline
           Requisitos No Funcionales & Requisitos de los módulos entregables.  Se refieren a las capacidades no funcionales del sistema como un todo y que especifican necesidades del usuario final.  \\ \hline
           Dependencias & Requisitos de reuso de IP-cores, describiendo las funciones que cada uno de estos módulos debe realizar. \\ \hline
         \end{tabular}
@@ -94,7 +95,7 @@ En este documento se redacta la información necesaria para realizar las pruebas
           \hline
           \cellcolor[gray]{0.9}\textbf{Sigla} & \cellcolor[gray]{0.9}\textbf{Descripción} \\ \hline
           FR      & Requisito Funcional  \\ \hline
-					TR      & Requisito Técnico  \\ \hline
+                    TR      & Requisito Técnico  \\ \hline
           NFR     & Requisito No Funcional  \\ \hline
           D       & Dependencia  \\ \hline
         \end{tabular}
@@ -112,7 +113,7 @@ En este documento se redacta la información necesaria para realizar las pruebas
           \cellcolor[gray]{0.9}\textbf{Prioridad} & \cellcolor[gray]{0.9}\textbf{Característica} \\ \hline
           Importante     & Requisito para que el sistema sea entregado.  \\ \hline
           Esencial       & Requisito que debe ser implementado para que el sistema funcione.  \\ \hline
-          Deseable       & Requisito que no compromete el funcionamento del sistema.  \\ \hline
+          Deseable       & Requisito que no compromete el funcionamiento del sistema.  \\ \hline
         \end{tabular}
       \end{center}
     \end{table}  
@@ -120,7 +121,7 @@ En este documento se redacta la información necesaria para realizar las pruebas
 
   % inicio dos requisitos Funcionales
   \section{Requisitos Funcionales}
-	
+    
 En un sistema HSM, un controlador maestro envía peticiones de servicios continuamente al HSM, entonces, el HSM responde a dichas peticiones con servicios de seguridad. Debido a que hay muchas solicitudes del controlador maestro, el HSM debe responder a las solicitudes muy rápidamente. Para este propósito, el microcontrolador y otros módulos FPGA deben estar altamente optimizados~\cite{evita-hsm:2012}. 
 
 En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el progreso del software que utilizará los servicios del HSM, los requisitos existentes definen las funcionalidades del sistema y los algoritmos que se implementarán en FPGA para el cifrado, el \textit{hashing}, firma digital y la generación de llaves.
@@ -129,110 +130,110 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
     \begin{functional}
      % format \requirement{name}{description}{priority}
      \requirement{fr1}
-		  {Cada llave debe ser usada por una sola función criptográfica}
+          {Cada llave debe ser usada por una sola función criptográfica}
       {The HSM ensures that each cryptographic key is only used for a single cryptographic function and only for its intended purpose.}
       {Importante}
     
      \requirement{fr2}
-		  {Cálculo de resumen (\textit{hash}) de mensajes}
+          {Cálculo de resumen (\textit{hash}) de mensajes}
       {permite la generación y verificación firmas digitales hash y adicionalmente HMAC.}
       {Importante}
-			
+            
      \requirement{fr3}
-      {Cifrador asimétrico}
+      {Cifrado asimétrico}
       {Descripción breve y objetiva.}
       {Importante}
-			
+            
      \requirement{fr4}
-      {Cifrador simétrico}
+      {Cifrado simétrico}
       {Descripción breve y objetiva.}
       {Importante}
-			
+            
      \requirement{fr5}
       {Cálculo de números pseudo-aleatorios}
       {Descripción breve y objetiva.}
       {Importante}
-			
-			\requirement{fr6}
-			{Proveer un contador monotónico}
-			{Descripción breve y objetiva.}
-			{Importante}
-			
-			\requirement{fr7}
-			{Creación de llaves internamente}
-			{Descripción breve y objetiva.}
-			{Importante}
-			
+            
+            \requirement{fr6}
+            {Proveer un contador monotónico}
+            {Descripción breve y objetiva.}
+            {Importante}
+            
+            \requirement{fr7}
+            {Creación de llaves internamente}
+            {Descripción breve y objetiva.}
+            {Importante}
+            
     \end{functional}
 
   \subsection{Requisitos Técnicos de los Requisitos Funcionales}
   
     \begin{technical}
       \techrequirement
-			{Requisitos Técnicos de FR\ref{fr1}}
-			{
+            {Requisitos Técnicos de FR\ref{fr1}}
+            {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
         \item[$-$]{El algoritmo utilizado es SHA-256}
-				\item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
+                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
       \end{itemize}
       }
-			
+            
       \techrequirement
-			{Requisitos Técnicos de FR\ref{fr2}}
+            {Requisitos Técnicos de FR\ref{fr2}}
       {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
         \item[$-$]{El algoritmo utilizado es SHA-256}
-				\item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
+                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
       \end{itemize}
       }
-			
-			\techrequirement
-			{Requisitos Técnicos de FR\ref{fr3}}
+            
+            \techrequirement
+            {Requisitos Técnicos de FR\ref{fr3}}
       {
       \begin{itemize}
         \item[$-$]{El algoritmo utilizado es AES-128}
       \end{itemize}
       }
-			
-			\techrequirement
-			{Requisitos Técnicos de FR\ref{fr4}}
+            
+            \techrequirement
+            {Requisitos Técnicos de FR\ref{fr4}}
       {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
         \item[$-$]{El algoritmo utilizado es SHA-256}
-				\item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
+                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
       \end{itemize}
       }
-			
-			\techrequirement
-			{Requisitos Técnicos de FR\ref{fr5}}
+            
+            \techrequirement
+            {Requisitos Técnicos de FR\ref{fr5}}
       {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
         \item[$-$]{El algoritmo utilizado es SHA-256}
-				\item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
+                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
       \end{itemize}
       }
-			
-			\techrequirement
-			{Requisitos Técnicos de FR\ref{fr6}}
+            
+            \techrequirement
+            {Requisitos Técnicos de FR\ref{fr6}}
       {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
         \item[$-$]{El algoritmo utilizado es SHA-256}
-				\item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
+                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
       \end{itemize}
       }
-			
-			\techrequirement
-			{Requisitos Técnicos de FR\ref{fr7}}
+            
+            \techrequirement
+            {Requisitos Técnicos de FR\ref{fr7}}
       {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
         \item[$-$]{El algoritmo utilizado es SHA-256}
-				\item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
+                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
       \end{itemize}
       }
     \end{technical}    
@@ -242,12 +243,12 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
 
   \begin{nonfunctional}
     \requirement{nfr1}
-		{Nombre del Requisito}
+        {Nombre del Requisito}
     {Descripción breve y objetiva.}
     {Importante}
 
     \requirement{nfr2}
-		{Nombre del Requisito}
+        {Nombre del Requisito}
     {Descripción breve y objetiva.}
     {Importante}
   \end{nonfunctional}
@@ -257,13 +258,73 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
 
   \begin{dependencies}
     \dependency{Nombre del IP-\textit{core}}
-		{Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
+        {Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
 
     \dependency{Nombre del IP-\textit{core}}
-		{Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
+        {Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
   \end{dependencies}  
 
-\section{Análisis estático con herramientas Lint}
+\section{Componentes del sistema}
+
+\section{Planeación}
+
+\begin{ganttchart}{1}{12}
+  \gantttitle{2011}{12} \\
+  \gantttitlelist{1,...,12}{1} \\
+  \ganttgroup{Group 1}{1}{7} \\
+  \ganttbar{Task 1}{1}{2} \\
+  \ganttlinkedbar{Task 2}{3}{7} \ganttnewline
+  \ganttmilestone{Milestone}{7} \ganttnewline
+  \ganttbar{Final Task}{8}{12}
+  \ganttlink{elem2}{elem3}
+  \ganttlink{elem3}{elem4}
+\end{ganttchart}
+
+\section{Vista general de UVM}
+
+The Universal Verification Methodology (UVM) that can improve interoperability, reduce the cost of using intellectual property (IP) for new projects or electronic design automation (EDA) tools, and make it easier to reuse verification components is provided. Overall, using this standard will lower verification costs and improve design quality throughout the industry. The primary audiences for this standard are the implementors of the UVM base class library, the implementors of tools supporting the UVM base class library, and the users of the UVM base class library.
+
+Role of each testbench element is explained below,
+UVM test
+The test is the topmost class. the test is responsible for,
+
+configuring the testbench.
+Initiate the testbench components construction process by building the next level down in the hierarchy ex: env.
+Initiate the stimulus by starting the sequence.
+UVM Environment
+Env or environment: The environment is a container component for grouping higher level components like agent’s and scoreboard.
+UVM Agent
+UVM agent groups the uvm components specific to an interface or protocol.
+example: groups the components associated with BFM(Bus Functional Model).
+The components of an agent are,
+
+UVM SEQUENCE ITEM
+The sequence-item defines the pin level activity generated by agent (to drive to DUT through the driver) or the activity has to be observed by agent (Placeholder for the activity monitored by the monitor on DUT signals).
+UVM DRIVER
+Responsible for driving the packet level data inside sequence item into pin level (to DUT).
+
+UVM SEQUENCE
+Defines the sequence in which the data items need to be generated and sent/received to/from the driver.
+UVM SEQUENCER
+Responsible for routing the data packet’s(sequence item) generated in sequence to the driver or vice verse.
+UVM MONITOR
+Observes pin level activity on interface signals and converts into packet level which is sent to components such as scoreboards.
+UVM Scoreboard
+Receives data item’s from monitor’s and compares with expected values.
+
+expected values can be either golden reference values or generated from the reference model.
+
+\section{Herramienta de pruebas \textit{toolchain}}
+
+\section{Pruebas unitarias}
+
+\section{Pruebas de integración}
+
+\section{Pruebas de sistema}
+
+\section{Análisis con herramientas \textit{Lint}}
+
+\subsection{Verilator}
 
  What Verilator Does
 Verilator is invoked with parameters similar to GCC or Synopsys’s VCS. It "Verilates" the specified synthesizable Verilog or SystemVerilog code by reading it, performing lint checks, and optionally inserting assertion checks and coverage-analysis points. It outputs single- or multi-threaded .cpp and .h files, the "Verilated" code.
@@ -278,7 +339,7 @@ go to https://www.veripool.org/projects/verilator/wiki/Installing
     \includegraphics[width=0.6\linewidth]{pictures/uvm.png}
     \label{uvm_tb}
   \end{figure}
-		
+        
 % Optional bibliography section
 % To use bibliograpy, first provide the ipprocess.bib file on the root folder.
 \newpage
