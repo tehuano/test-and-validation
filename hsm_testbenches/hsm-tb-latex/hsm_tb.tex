@@ -279,55 +279,39 @@ Los HSMs se existen en diferentes configuraciones, los tipos de HSM comunes en s
 
 
 \begin{landscape}
-
 \section{Planeación}
 
-\begin{ganttchart}[
-        title/.append style={fill=black!10},
-        x unit=3pt,
-        %compress calendar,
-        time slot format=simple,
-        ]{1}{140}
-    \small
-    \gantttitle{2019}{84}
-    \gantttitle{2020}{56} \\
-    \gantttitle{Octubrer}{28}
-    \gantttitle{Noviembre}{28}
-    \gantttitle{Diciembre}{28}
-    \gantttitle{Enero}{28}
-    \gantttitle{Febrero}{28}\\
-    \gantttitle{W1}{7}
-    \gantttitle{W2}{7}
-    \gantttitle{W3}{7}
-    \gantttitle{W4}{7}
-    \gantttitle{W5}{7}
-    \gantttitle{W6}{7}
-    \gantttitle{W7}{7} 
-    \gantttitle{W8}{7}
-    \gantttitle{W9}{7}
-    \gantttitle{W10}{7}
-    \gantttitle{W11}{7}
-    \gantttitle{W12}{7}
-    \gantttitle{W13}{7}
-    \gantttitle{W14}{7}
-    \gantttitle{W15}{7}
-    \gantttitle{W16}{7}
-    \gantttitle{W17}{7}
-    \gantttitle{W18}{7}
-    \gantttitle{W19}{7}
-    \gantttitle{W20}{7}\\
-
-\ganttbar{Revisión del fundamento teórico}{3}{6}\\
-\ganttbar{Propuesta de proyecto}{7}{10}\\
-\ganttbar{Detalle de requerimientos}{7}{10}\\
-\ganttbar{Revisión del estado del arte}{11}{14}\\
-\ganttbar{Elaboración de hipótesis}{15}{18}\\
-\ganttbar{Elaboración de objetivos}{16}{22}\\
-\ganttbar{Diseño del sistema}{16}{22}\\
-\ganttbar{Especificación del sistema}{16}{22}\\
-\ganttbar{Pruebas unitarias}{16}{22}\\
-\ganttbar{Pruebas de integración}{16}{22}\\
-\ganttbar{Redacción de resultados}{16}{22}\\
+\noindent
+\begin{ganttchart}[vgrid, hgrid, y unit title=0.8cm, y unit chart=0.8cm,
+                   title label font=\footnotesize, bar label font=\small, 
+                   bar label anchor/.append style={align=right}]{1}{36}
+  \gantttitle{2020}{36}\\
+  \gantttitle{Ene}{4}\gantttitle{Feb}{4}\gantttitle{Mar}{4}
+  \gantttitle{Abr}{4}\gantttitle{May}{4}\gantttitle{Jun}{4}
+  \gantttitle{Jul}{4}\gantttitle{Ago}{4}\gantttitle{Sep}{4}\\
+  \gantttitle{s1}{1}\gantttitle{s2}{1}\gantttitle{s3}{1}\gantttitle{s4}{1}
+  \gantttitle{s5}{1}\gantttitle{s6}{1}\gantttitle{s7}{1}\gantttitle{s8}{1}
+  \gantttitle{s9}{1}\gantttitle{s10}{1}\gantttitle{s11}{1}\gantttitle{s12}{1}
+  \gantttitle{s13}{1}\gantttitle{s14}{1}\gantttitle{s15}{1}\gantttitle{s16}{1}
+  \gantttitle{s17}{1}\gantttitle{s18}{1}\gantttitle{s19}{1}\gantttitle{s20}{1}
+  \gantttitle{s21}{1}\gantttitle{s22}{1}\gantttitle{s23}{1}\gantttitle{s24}{1}
+  \gantttitle{s25}{1}\gantttitle{s26}{1}\gantttitle{s27}{1}\gantttitle{s28}{1}
+  \gantttitle{s29}{1}\gantttitle{s30}{1}\gantttitle{s31}{1}\gantttitle{s32}{1}
+  \gantttitle{s33}{1}\gantttitle{s34}{1}\gantttitle{s35}{1}\gantttitle{s36}{1}\\
+  \ganttbar{Fundamento teórico}{1}{4}\\
+  \ganttbar{Estado del arte}{4}{10}\\
+  \ganttbar{Definición de ojetivos}{4}{5}\\
+  \ganttbar{Propuesta de proyecto}{2}{5}\\
+  \ganttbar{Ajuste de hipótesis}{11}{12}\\
+  \ganttbar{Requerimientos}{12}{14}\\
+  \ganttbar{Diseño del sistema}{14}{18}\\
+  \ganttbar{Diseño de pruebas}{13}{15}\\
+  \ganttbar{Desarrollo del sistema}{18}{22}\\
+  \ganttbar{Pruebas unitarias}{22}{24}\\
+  \ganttbar{Pruebas de integración}{24}{26}\\
+  \ganttbar{Mejora del sistema}{26}{30}\\
+  \ganttbar{Redacción de resultados}{30}{31}\\
+  \ganttbar{Revisión y retroalimentación}{31}{36}
 \end{ganttchart}
 \end{landscape}
 
@@ -335,12 +319,7 @@ Los HSMs se existen en diferentes configuraciones, los tipos de HSM comunes en s
 
 The Universal Verification Methodology (UVM) that can improve interoperability, reduce the cost of using intellectual property (IP) for new projects or electronic design automation (EDA) tools, and make it easier to reuse verification components is provided. Overall, using this standard will lower verification costs and improve design quality throughout the industry. The primary audiences for this standard are the implementors of the UVM base class library, the implementors of tools supporting the UVM base class library, and the users of the UVM base class library.
 
-Role of each testbench element is explained below,
-UVM test
-The test is the topmost class. the test is responsible for,
-
-configuring the testbench.
-Initiate the testbench components construction process by building the next level down in the hierarchy ex: env.
+Role of each testbench element is explained below, UVM test The test is the topmost class. the test is responsible for, configuring the testbench. Initiate the testbench components construction process by building the next level down in the hierarchy ex: env.
 Initiate the stimulus by starting the sequence.
 UVM Environment
 Env or environment: The environment is a container component for grouping higher level components like agent’s and scoreboard.
@@ -349,7 +328,8 @@ UVM agent groups the uvm components specific to an interface or protocol.
 example: groups the components associated with BFM(Bus Functional Model).
 The components of an agent are,
 
-UVM SEQUENCE ITEM
+\subsection{SEQUENCE ITEM}
+
 The sequence-item defines the pin level activity generated by agent (to drive to DUT through the driver) or the activity has to be observed by agent (Placeholder for the activity monitored by the monitor on DUT signals).
 UVM DRIVER
 Responsible for driving the packet level data inside sequence item into pin level (to DUT).
@@ -384,12 +364,11 @@ The user writes a little C++/SystemC wrapper file, which instantiates the "Veril
 
 Verilator may not be the best choice if you are expecting a full featured replacement for NC-Verilog, VCS or another commercial Verilog simulator, or if you are looking for a behavioral Verilog simulator e.g. for a quick class project (we recommend Icarus Verilog for this.) However, if you are looking for a path to migrate synthesizable Verilog to C++ or SystemC, and your team is comfortable writing just a touch of C++ code, Verilator is the tool for you.
 
-go to https://www.veripool.org/projects/verilator/wiki/Installing
-
-  \begin{figure}[h]
-    \includegraphics[width=0.6\linewidth]{pictures/uvm.png}
-    \label{uvm_tb}
-  \end{figure}
+\begin{figure}[h]
+  \centering  
+  \includegraphics[width=0.6\linewidth]{pictures/uvm.png}
+  \label{uvm_tb}
+\end{figure}
         
 % Optional bibliography section
 % To use bibliograpy, first provide the ipprocess.bib file on the root folder.
