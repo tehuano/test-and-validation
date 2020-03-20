@@ -125,7 +125,7 @@ En este documento se redacta la información necesaria para realizar las pruebas
     
 En un sistema HSM, un controlador maestro envía peticiones de servicios continuamente al HSM, entonces, el HSM responde a dichas peticiones con servicios de seguridad. Debido a que hay muchas solicitudes del controlador maestro, el HSM debe responder a las solicitudes muy rápidamente. Para este propósito, el microcontrolador y otros módulos FPGA deben estar altamente optimizados~\cite{evita-hsm:2012}. 
 
-En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el progreso del software que utilizará los servicios del HSM, los requisitos existentes definen las funcionalidades del sistema y los algoritmos que se implementarán en FPGA para el cifrado, el \textit{hashing}, firma digital y la generación de llaves.
+En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el software que utilizará los servicios del HSM a nivel de aplicación, los requisitos existentes definen las funcionalidades de seguridad y los algoritmos que se implementarán en FPGA, en general, el \textit{hashing}, firma digital y la generación de llaves. Por lo tanto, el objetivo es enfocado a cumplir con necesidades indicadas en \cite{std-fips-140-2:2005} que es el estándar utilizado para certificar un HSM.
 
     \subsection{Requisitos Funcionales}
     \begin{functional}
