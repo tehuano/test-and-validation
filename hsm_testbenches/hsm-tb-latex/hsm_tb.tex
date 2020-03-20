@@ -1,7 +1,7 @@
 %
 % Portuguese-BR vertion
 % 
-\documentclass{article}
+\documentclass[a4paper]{article}
 
 \usepackage{hsm_tb}
 % Use longtable if you want big tables to split over multiple pages.
@@ -9,6 +9,7 @@
 \usepackage[utf8]{inputenc} 
 \usepackage[spanish]{babel} % Uncomment for portuguese
 \usepackage{pgfgantt}
+\usepackage{pdflscape}
 
 \sloppy
 
@@ -135,7 +136,7 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
       {Importante}
     
      \requirement{fr2}
-          {Cálculo de resumen (\textit{hash}) de mensajes}
+      {Cálculo de resumen (\textit{hash}) de mensajes}
       {permite la generación y verificación firmas digitales hash y adicionalmente HMAC.}
       {Importante}
             
@@ -189,16 +190,16 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
       \end{itemize}
       }
             
-            \techrequirement
-            {Requisitos Técnicos de FR\ref{fr3}}
+      \techrequirement
+      {Requisitos Técnicos de FR\ref{fr3}}
       {
       \begin{itemize}
         \item[$-$]{El algoritmo utilizado es AES-128}
       \end{itemize}
       }
             
-            \techrequirement
-            {Requisitos Técnicos de FR\ref{fr4}}
+      \techrequirement
+      {Requisitos Técnicos de FR\ref{fr4}}
       {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
@@ -207,8 +208,8 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
       \end{itemize}
       }
             
-            \techrequirement
-            {Requisitos Técnicos de FR\ref{fr5}}
+      \techrequirement
+      {Requisitos Técnicos de FR\ref{fr5}}
       {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
@@ -233,7 +234,7 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
         \item[$-$]{El algoritmo utilizado es SHA-256}
-                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
+        \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
       \end{itemize}
       }
     \end{technical}    
@@ -243,12 +244,12 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
 
   \begin{nonfunctional}
     \requirement{nfr1}
-        {Nombre del Requisito}
+    {Nombre del Requisito}
     {Descripción breve y objetiva.}
     {Importante}
 
     \requirement{nfr2}
-        {Nombre del Requisito}
+    {Nombre del Requisito}
     {Descripción breve y objetiva.}
     {Importante}
   \end{nonfunctional}
@@ -259,26 +260,76 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el pro
   \begin{dependencies}
     \dependency{Nombre del IP-\textit{core}}
         {Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
-
     \dependency{Nombre del IP-\textit{core}}
         {Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
   \end{dependencies}  
 
-\section{Componentes del sistema}
+\section{Arquitectura del sistema}
+
+Un HSM (\textit{Hardware Security Module}) es un procesador criptográfico seguro con el objetivo principal de administrar llaves criptográficas y ofrecer operaciones criptográficas aceleradas utilizando dichas llaves. Los HSM suelen ofrecer mecanismos de protección de la información como autenticación robusta y resistencia al sabotaje físico. Las características principales de un HSM incluyen almacenamiento y generación de llaves, cifrado simétrico y asimétrico acelerado y copia de seguridad de material sensible mediante cifrado \cite{mtreviewhsm:2010}. 
+
+Los HSMs se existen en diferentes configuraciones, los tipos de HSM comunes en sistemas embebidos se encuentran en forma de coprocesadores conectados mediante un bus directamente al microcontrolador o como un componente más del microcontrolador, en la Figura  ~\ref{fig:hsm_general} se presenta el esquema general de la arquitectura propuesta en este proyecto.
+ 
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{pictures/hsm_architecture.png}
+  \caption{Esquema general de un HSM para sistema embebido.}
+  \label{fig:hsm_general}
+\end{figure}
+
+
+\begin{landscape}
 
 \section{Planeación}
 
-\begin{ganttchart}{1}{12}
-  \gantttitle{2011}{12} \\
-  \gantttitlelist{1,...,12}{1} \\
-  \ganttgroup{Group 1}{1}{7} \\
-  \ganttbar{Task 1}{1}{2} \\
-  \ganttlinkedbar{Task 2}{3}{7} \ganttnewline
-  \ganttmilestone{Milestone}{7} \ganttnewline
-  \ganttbar{Final Task}{8}{12}
-  \ganttlink{elem2}{elem3}
-  \ganttlink{elem3}{elem4}
+\begin{ganttchart}[
+        title/.append style={fill=black!10},
+        x unit=3pt,
+        %compress calendar,
+        time slot format=simple,
+        ]{1}{140}
+    \small
+    \gantttitle{2019}{84}
+    \gantttitle{2020}{56} \\
+    \gantttitle{Octubrer}{28}
+    \gantttitle{Noviembre}{28}
+    \gantttitle{Diciembre}{28}
+    \gantttitle{Enero}{28}
+    \gantttitle{Febrero}{28}\\
+    \gantttitle{W1}{7}
+    \gantttitle{W2}{7}
+    \gantttitle{W3}{7}
+    \gantttitle{W4}{7}
+    \gantttitle{W5}{7}
+    \gantttitle{W6}{7}
+    \gantttitle{W7}{7} 
+    \gantttitle{W8}{7}
+    \gantttitle{W9}{7}
+    \gantttitle{W10}{7}
+    \gantttitle{W11}{7}
+    \gantttitle{W12}{7}
+    \gantttitle{W13}{7}
+    \gantttitle{W14}{7}
+    \gantttitle{W15}{7}
+    \gantttitle{W16}{7}
+    \gantttitle{W17}{7}
+    \gantttitle{W18}{7}
+    \gantttitle{W19}{7}
+    \gantttitle{W20}{7}\\
+
+\ganttbar{Revisión del fundamento teórico}{3}{6}\\
+\ganttbar{Propuesta de proyecto}{7}{10}\\
+\ganttbar{Detalle de requerimientos}{7}{10}\\
+\ganttbar{Revisión del estado del arte}{11}{14}\\
+\ganttbar{Elaboración de hipótesis}{15}{18}\\
+\ganttbar{Elaboración de objetivos}{16}{22}\\
+\ganttbar{Diseño del sistema}{16}{22}\\
+\ganttbar{Especificación del sistema}{16}{22}\\
+\ganttbar{Pruebas unitarias}{16}{22}\\
+\ganttbar{Pruebas de integración}{16}{22}\\
+\ganttbar{Redacción de resultados}{16}{22}\\
 \end{ganttchart}
+\end{landscape}
 
 \section{Vista general de UVM}
 
