@@ -10,6 +10,7 @@
 \usepackage[spanish]{babel} % Uncomment for portuguese
 \usepackage{pgfgantt}
 \usepackage{pdflscape}
+\usepackage{listings}
 
 \sloppy
 
@@ -59,16 +60,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introducción}
 
-\subsection{Vista General del Documento}
-En este documento se redacta la información necesaria para realizar las pruebas al módulo hardware para seguridad basado en el estándar~\cite{1059-1993-std:1994}.
+En la actualidad, las comunicaciones electrónicas tienen una gran importancia para las personas, puesto que, muchas de sus actividades cotidianas están relacionadas al uso de medios electrónicos para la comunicación; entre estas actividades se encuentran: el comercio electrónico, las transacciones con dinero electrónico, la mensajería de correo electrónico, la interacción en redes sociales, entre otras.
 
-  \begin{itemize}
-   \item \textbf{Requisitos funcionales -} Lista de todos los requisitos funcionales.
-   \item \textbf{Requisitos no funcionales -} Lista de todos los requisitos no Funcionales.
-   \item \textbf{Dependencias -} Conjunto de dependencias de IP-cores previstos.
-   \item \textbf{Notas -} Lista de notas presentadas en el documento.
-   \item \textbf{Referencias -} Lista de todos los textos referenciados en el documento.
-  \end{itemize}
+\subsection{Vista General del Documento}
+
+En este documento se redacta la información necesaria para realizar las pruebas al módulo hardware para seguridad basado en el estándar~\cite{1059-1993-std:1994}.
 
   % inicio das definições do documento
   \subsection{Definiciones}
@@ -85,9 +81,9 @@ En este documento se redacta la información necesaria para realizar las pruebas
         \end{tabular}
       \end{center}
     \end{table}  
-  % fim
+  % fin
 
-  % inicio da tabela de acronimos e abreviacoes do documento
+  % inicio tabla acrónimo
   \subsection{Acrónimos y abreviaciones}
     \FloatBarrier
     \begin{table}[H]
@@ -96,15 +92,16 @@ En este documento se redacta la información necesaria para realizar las pruebas
           \hline
           \cellcolor[gray]{0.9}\textbf{Sigla} & \cellcolor[gray]{0.9}\textbf{Descripción} \\ \hline
           FR      & Requisito Funcional  \\ \hline
-                    TR      & Requisito Técnico  \\ \hline
+          TR      & Requisito Técnico  \\ \hline
           NFR     & Requisito No Funcional  \\ \hline
           D       & Dependencia  \\ \hline
+          HSM     & \textit{Hardware Security Module} \\ \hline
+          DUT     & \textit{Design Under Test} \\ \hline
+          UVM     & \textit{Universal Verification Methodology} \\ \hline
         \end{tabular}
       \end{center}
     \end{table}  
-  % fim
 
-  % inicio da descriao de prioridades de requisitos
   \subsection{Prioridades de los Requisitos}
     \FloatBarrier
     \begin{table}[H]
@@ -118,9 +115,6 @@ En este documento se redacta la información necesaria para realizar las pruebas
         \end{tabular}
       \end{center}
     \end{table}  
-  % fim
-
-  % inicio dos requisitos Funcionales
   \section{Requisitos Funcionales}
     
 En un sistema HSM, un controlador maestro envía peticiones de servicios continuamente al HSM, entonces, el HSM responde a dichas peticiones con servicios de seguridad. Debido a que hay muchas solicitudes del controlador maestro, el HSM debe responder a las solicitudes muy rápidamente. Para este propósito, el microcontrolador y otros módulos FPGA deben estar altamente optimizados~\cite{evita-hsm:2012}. 
@@ -129,41 +123,40 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el sof
 
     \subsection{Requisitos Funcionales}
     \begin{functional}
-     % format \requirement{name}{description}{priority}
      \requirement{fr1}
-          {Cada llave debe ser usada por una sola función criptográfica}
-      {The HSM ensures that each cryptographic key is only used for a single cryptographic function and only for its intended purpose.}
+      {Cada llave debe ser usada por una sola función criptográfica}
+      {El HSM debe garantizar que cada llave es usada por un solo algoritmo y solamente para ese propósito.}
       {Importante}
     
      \requirement{fr2}
       {Cálculo de resumen (\textit{hash}) de mensajes}
-      {permite la generación y verificación firmas digitales hash y adicionalmente HMAC.}
+      {Permitir la generación y verificación firmas digitales \textit{hashing} y adicionalmente HMAC.}
       {Importante}
             
      \requirement{fr3}
       {Cifrado asimétrico}
-      {Descripción breve y objetiva.}
+      {El HSM debe proveer una interfaz para peticiones de cifrado asimétrico. Además, interfaces para la recepción y transmisión de todos los parámetros necesarios para dicho cifrado desde la interfáz principal.}
       {Importante}
             
      \requirement{fr4}
       {Cifrado simétrico}
-      {Descripción breve y objetiva.}
+      {El HSM debe proveer una interfaz para peticiones de cifrado simétrico como AES-128. Además, interfaces para la recepción y transmisión de todos los parámetros necesarios para dicho cifrado desde la interfáz principal. Es importante especificar que debe proveer la capacidad de almacenamiento o programación de llaver simétricas.}
       {Importante}
             
      \requirement{fr5}
       {Cálculo de números pseudo-aleatorios}
-      {Descripción breve y objetiva.}
+      {El HSM debe proveer la capacidad de generar números pseudo-aleatorios utilizando generadores seriales.}
       {Importante}
             
-            \requirement{fr6}
-            {Proveer un contador monotónico}
-            {Descripción breve y objetiva.}
-            {Importante}
+     \requirement{fr6}
+     {Proveer un contador monotónico}
+     {El HSM debe integrar un contador monotónico que devuelva valores al ser solicitados desde la interfaz principal.}
+     {Importante}
             
-            \requirement{fr7}
-            {Creación de llaves internamente}
-            {Descripción breve y objetiva.}
-            {Importante}
+     \requirement{fr7}
+     {Creación de llaves internamente}
+     {El HSM debe proveer la capacidad de abstraer la generación de llaves al realizar este procedimiento en sus componentes internos.}
+     {Importante}
             
     \end{functional}
 
@@ -171,65 +164,17 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el sof
   
     \begin{technical}
       \techrequirement
-            {Requisitos Técnicos de FR\ref{fr1}}
-            {
+      {Requisitos Técnicos de FR\ref{fr1}}
+      {
       \begin{itemize}
-        \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
-        \item[$-$]{El algoritmo utilizado es SHA-256}
-                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
+        \item[$-$]{La llave que será utilizada llega a la interfaz del HSM}
+        \item[$-$]{El algoritmo que utiliza la llave mapea a un conjunto de llaver}
+        \item[$-$]{La llave programada no se puede utilizar para otro propósito}
       \end{itemize}
       }
             
       \techrequirement
-            {Requisitos Técnicos de FR\ref{fr2}}
-      {
-      \begin{itemize}
-        \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
-        \item[$-$]{El algoritmo utilizado es SHA-256}
-                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
-      \end{itemize}
-      }
-            
-      \techrequirement
-      {Requisitos Técnicos de FR\ref{fr3}}
-      {
-      \begin{itemize}
-        \item[$-$]{El algoritmo utilizado es AES-128}
-      \end{itemize}
-      }
-            
-      \techrequirement
-      {Requisitos Técnicos de FR\ref{fr4}}
-      {
-      \begin{itemize}
-        \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
-        \item[$-$]{El algoritmo utilizado es SHA-256}
-                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
-      \end{itemize}
-      }
-            
-      \techrequirement
-      {Requisitos Técnicos de FR\ref{fr5}}
-      {
-      \begin{itemize}
-        \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
-        \item[$-$]{El algoritmo utilizado es SHA-256}
-                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
-      \end{itemize}
-      }
-            
-            \techrequirement
-            {Requisitos Técnicos de FR\ref{fr6}}
-      {
-      \begin{itemize}
-        \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
-        \item[$-$]{El algoritmo utilizado es SHA-256}
-                \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
-      \end{itemize}
-      }
-            
-            \techrequirement
-            {Requisitos Técnicos de FR\ref{fr7}}
+      {Requisitos Técnicos de FR\ref{fr2}}
       {
       \begin{itemize}
         \item[$-$]{Los datos que serán utilizados llegan bloque a bloque al HSM}
@@ -237,46 +182,93 @@ En esta etapa del desarrollo del HSM, no se determina cómo tomará forma el sof
         \item[$-$]{El \textit{hash} se envía a una dirección especificada previamente}
       \end{itemize}
       }
+            
+      \techrequirement
+      {Requisitos Técnicos de FR\ref{fr3}}
+      {
+      \begin{itemize}
+        \item[$-$]{El algoritmo utilizado es RSA}
+        \item[$-$]{La llave para RSA debe ser programada en otro procedimiento o durante la transacción}
+        \item[$-$]{La interfaz del HSM permite especificar la llave a utilizar}
+      \end{itemize}
+      }
+            
+      \techrequirement
+      {Requisitos Técnicos de FR\ref{fr4}}
+      {
+      \begin{itemize}
+        \item[$-$]{El algoritmo utilizado es AES-128}
+        \item[$-$]{La llave para AES-128 debe estar programada}
+        \item[$-$]{La interfaz del HSM permite especificar la llave a utilizar}
+      \end{itemize}
+      }
+            
+      \techrequirement
+      {Requisitos Técnicos de FR\ref{fr5}}
+      {
+      \begin{itemize}
+        \item[$-$]{Los datos son generados continuamente}
+        \item[$-$]{El procedimiento no depende del controlador principal salvo en el proceso de lectura}
+      \end{itemize}
+      }
+            
+      \techrequirement
+      {Requisitos Técnicos de FR\ref{fr6}}
+      {
+      \begin{itemize}
+        \item[$-$]{Los datos son generados cada vez que se piden desde el controlador}
+        \item[$-$]{El procedimiento depende del controlador principal}
+      \end{itemize}
+      }
+            
+      \techrequirement
+      {Requisitos Técnicos de FR\ref{fr7}}
+      {
+      \begin{itemize}
+        \item[$-$]{Los datos son generados continuamente}
+        \item[$-$]{El procedimiento no depende del controlador principal salvo en el proceso de lectura}
+      \end{itemize}
+      }
     \end{technical}    
  
+\newpage
 \section{Requisitos no Funcionales}
-% Esta seção apresenta a lista de Requisitos No Funcionales do projeto.
 
   \begin{nonfunctional}
     \requirement{nfr1}
-    {Nombre del Requisito}
-    {Descripción breve y objetiva.}
+    {Tiempor de respuesta}
+    {Los tiempo de respuesta deben ser del order de los microsegungos y milisegundos en el caso de RSA.}
     {Importante}
 
     \requirement{nfr2}
-    {Nombre del Requisito}
-    {Descripción breve y objetiva.}
+    {Interfaz de usuario}
+    {La intefaz utilizada debe ser un bufer en una memoria compartida.}
     {Importante}
   \end{nonfunctional}
 
 \section{Dependencias}
-  % Esta seção apresenta uma lista dos IP-cores disponíveis % para reuso e que devem ser adotados no desenvolvimento % deste projeto.
-
   \begin{dependencies}
-    \dependency{Nombre del IP-\textit{core}}
-        {Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
-    \dependency{Nombre del IP-\textit{core}}
-        {Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
+    \dependency{Nombre del IP-\textit{core} - TDB}
+    {Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
+    \dependency{Nombre del IP-\textit{core} - TDB}
+    {Descripción breve y objetiva del IP-\textit{core} y referencia al documento.}
   \end{dependencies}  
 
+\newpage
 \section{Arquitectura del sistema}
 
-Un HSM (\textit{Hardware Security Module}) es un procesador criptográfico seguro con el objetivo principal de administrar llaves criptográficas y ofrecer operaciones criptográficas aceleradas utilizando dichas llaves. Los HSM suelen ofrecer mecanismos de protección de la información como autenticación robusta y resistencia al sabotaje físico. Las características principales de un HSM incluyen almacenamiento y generación de llaves, cifrado simétrico y asimétrico acelerado y copia de seguridad de material sensible mediante cifrado \cite{mtreviewhsm:2010}. 
+Un HSM (\textit{Hardware Security Module}) es un procesador criptográfico seguro con el objetivo principal de administrar llaves criptográficas y ofrecer operaciones criptográficas aceleradas utilizando dichas llaves. Los HSM suelen ofrecer mecanismos de protección de la información como autenticación robusta y resistencia al sabotaje físico.
 
-Los HSMs se existen en diferentes configuraciones, los tipos de HSM comunes en sistemas embebidos se encuentran en forma de coprocesadores conectados mediante un bus directamente al microcontrolador o como un componente más del microcontrolador, en la Figura  ~\ref{fig:hsm_general} se presenta el esquema general de la arquitectura propuesta en este proyecto.
+Las características principales de un HSM incluyen almacenamiento y generación de llaves, cifrado simétrico y asimétrico acelerado y copia de seguridad de material sensible mediante cifrado \cite{mtreviewhsm:2010,std-fips-140-2:2005}. En la Figura \ref{fig:hsm_general} se presenta el esquema general de la arquitectura propuesta en este proyecto.
  
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.5]{pictures/hsm_architecture.png}
+  \includegraphics[width=0.8\linewidth]{pictures/hsm_architecture.png}
   \caption{Esquema general de un HSM para sistema embebido.}
   \label{fig:hsm_general}
 \end{figure}
 
+Los HSMs existen en diferentes configuraciones, los tipos de HSM comunes en sistemas embebidos se encuentran en forma de coprocesadores conectados mediante un bus de alto desempeño directamente al microcontrolador, igualmente se encuentran como un componente interno del microcontrolador. En las siguiente secciones se presenta la planeación del proyecto y la estratégia para realizar las pruebas y validación del mismo.
 
 \begin{landscape}
 \section{Planeación}
@@ -315,63 +307,136 @@ Los HSMs se existen en diferentes configuraciones, los tipos de HSM comunes en s
 \end{ganttchart}
 \end{landscape}
 
-\section{Vista general de UVM}
+\section{Pruebas y validación}
 
-The Universal Verification Methodology (UVM) that can improve interoperability, reduce the cost of using intellectual property (IP) for new projects or electronic design automation (EDA) tools, and make it easier to reuse verification components is provided. Overall, using this standard will lower verification costs and improve design quality throughout the industry. The primary audiences for this standard are the implementors of the UVM base class library, the implementors of tools supporting the UVM base class library, and the users of the UVM base class library.
+\subsection{Introducción a UVM}
 
-Role of each testbench element is explained below, UVM test The test is the topmost class. the test is responsible for, configuring the testbench. Initiate the testbench components construction process by building the next level down in the hierarchy ex: env.
-Initiate the stimulus by starting the sequence.
-UVM Environment
-Env or environment: The environment is a container component for grouping higher level components like agent’s and scoreboard.
-UVM Agent
-UVM agent groups the uvm components specific to an interface or protocol.
-example: groups the components associated with BFM(Bus Functional Model).
-The components of an agent are,
-
-\subsection{SEQUENCE ITEM}
-
-The sequence-item defines the pin level activity generated by agent (to drive to DUT through the driver) or the activity has to be observed by agent (Placeholder for the activity monitored by the monitor on DUT signals).
-UVM DRIVER
-Responsible for driving the packet level data inside sequence item into pin level (to DUT).
-
-UVM SEQUENCE
-Defines the sequence in which the data items need to be generated and sent/received to/from the driver.
-UVM SEQUENCER
-Responsible for routing the data packet’s(sequence item) generated in sequence to the driver or vice verse.
-UVM MONITOR
-Observes pin level activity on interface signals and converts into packet level which is sent to components such as scoreboards.
-UVM Scoreboard
-Receives data item’s from monitor’s and compares with expected values.
-
-expected values can be either golden reference values or generated from the reference model.
-
-\section{Herramienta de pruebas \textit{toolchain}}
-
-\section{Pruebas unitarias}
-
-\section{Pruebas de integración}
-
-\section{Pruebas de sistema}
-
-\section{Análisis con herramientas \textit{Lint}}
-
-\subsection{Verilator}
-
- What Verilator Does
-Verilator is invoked with parameters similar to GCC or Synopsys’s VCS. It "Verilates" the specified synthesizable Verilog or SystemVerilog code by reading it, performing lint checks, and optionally inserting assertion checks and coverage-analysis points. It outputs single- or multi-threaded .cpp and .h files, the "Verilated" code.
-
-The user writes a little C++/SystemC wrapper file, which instantiates the "Verilated" model of the user’s top level module. These C++/SystemC files are then compiled by a C++ compiler (gcc/clang/MSVC++). The resulting executable performs the design simulation. Verilator also supports linking its generated libraries, optionally encrypted, into other simulators.
-
-Verilator may not be the best choice if you are expecting a full featured replacement for NC-Verilog, VCS or another commercial Verilog simulator, or if you are looking for a behavioral Verilog simulator e.g. for a quick class project (we recommend Icarus Verilog for this.) However, if you are looking for a path to migrate synthesizable Verilog to C++ or SystemC, and your team is comfortable writing just a touch of C++ code, Verilator is the tool for you.
+La funcionalidad de cada elemento de los \textit{testbenches} basados en UVM se explica en esta sección. Una prueba o \textit{test} UVM es la clase más alta dentro de la API. La prueba es responsable de configurar el banco de pruebas. El esquema general de una prueba en UVM se muestra en la Figura \ref{uvm_tb}, la abtracción mostrada en esta arquitectura permite la definición de pruebas a bajo o alto nivel sin cambios significativo.
 
 \begin{figure}[h]
   \centering  
-  \includegraphics[width=0.6\linewidth]{pictures/uvm.png}
+  \includegraphics[width=0.8\linewidth]{pictures/uvm.png}
+  \caption{Diagrama a bloques de un \textit{testbench} utilizando UVM.}
   \label{uvm_tb}
 \end{figure}
+
+\textbf{uvm agent:} Agrupa los componentes uvm específicos de una interfaz o protocolo.Por ejemplo, agrupa los componentes asociados con el BFM (\textit{Bus Functional Model}). Los componentes de un agente se definen en los siguientes párrafos.
+
+\textbf{sequence item:} Define la actividad a nivel de pin generada por el agente, esto es, conducir al DUT (\textit{Design Under Test}) a través del controlador o la actividad monitoreada por el monitor.
+
+\textbf{uvm driver:} Responsable de conducir los datos de nivel de paquete dentro del \textit{sequence item} al nivel de pin al DUT.
+
+\textbf{uvm sequence:} Define la secuencia en la que los elementos de datos deben generarse y enviarse o recibirse desde y hacia el controlador.
+
+\textbf {uvm sequencer:} Responsable de enrutar el paquete de datos (\textit{sequence item}) generado en secuencia hacia el controlador o viceversa.
+
+\textbf{uvm monitor:} Observa la actividad de nivel de pin en las señales de la interfaz y se convierte en nivel de paquete que se envía a componentes como los \textit{scoreboards}.
+
+\textbf{uvm scoreboard:} Recibe los elementos de datos del monitor y los compara con los valores esperados.
+los valores esperados pueden ser valores de referencia (\textit{golden data}) o generados a partir del modelo de referencia.
+
+
+\subsection{Herramienta de pruebas \textit{uvm-python-toolchain}}
+
+Para este proyecto se encuentra en desarrollo una herramienta que permite la automatización de pruebas con UVM. La herramienta está escrita en Python y utiliza la librería unittest. Esta herramienta permite al desarrollador definir pruebas sobre un \textit{test model} escrito en UVM y simulado en Modelsim. Al final, uvm es el encargado de generar un reporte que es evaluado en la parte de Python y se determina el éxito o no de la prueba. En la Figura \ref{fig:run_test}, se muestra la secuencia principal de la herramienta en Python, este módulo ejecuta Modelsim con un argumento \textit{.do} que es la extensión del lenguaje \textit{scripting} de Modelsim.
+
+\begin{figure}[h]
+  \centering  
+  \includegraphics[width=0.8\linewidth]{pictures/python_test.png}
+  \caption{Programa en Python que ejecuta todas las prruebas del \textit{test model}.}
+  \label{fig:run_test}
+\end{figure}
+
+Esta herramienta será utilizada para la etapa de pruebas unitarias y de integración para facilitar el desarrollo, además, serán agregadas funcionalidades para análisis estático de código.
+
+\newpage
+\subsection{Pruebas unitarias}
+
+\noindent \textbf{Definición}
+
+La amplitud deseada en las pruebas unitarias será a nivel de algoritmo criptográfico. Es decir, se evaluará el \textit{hashing}, cifrado y generación de números aleatorios. Las técnicas a utilizar son caja blanca y la evaluación será, además, relacionada a cubrir los requerimientos técnicos del sistema. 
+
+\noindent\textbf{Participantes}
+
+\begin{itemize}
+  \item El desarrollador
+  \item El \textit{toolchain} que podrá correr pruebas automáticamente
+\end{itemize}
+
+
+\noindent\textbf{Metodología}
+
+\begin{itemize}
+  \item El componente que ejecuta un algoritmo criptográfico se separa en un \textit{testbench} UVM
+  \item Se definen los estímulos para el algoritmo
+  \item Se define la sequencia para transmitir los estímulos al DUT
+  \item Se ejecuta la simulación UVM
+  \item Se almacenan los resultados del scoreboard
+  \item El programa que ejecuta las pruebas determina si la prueba tiene éxito o no
+\end{itemize}
+
+
+\subsection{Pruebas de integración}
+
+\noindent\textbf{Definición}
+Las pruebas de integración se enfocan a la prueba de algoritmos a alto nivel, es decir, se prueba un CMAC en lugar de probar directamenete el algoritmo de cifrado. Además, de manera incremental, se busca interconectar los componentes del HSM al controlador principal para que verificar que los resultados de la integración incremental tienen compatibilidad con niveles de integración a menor nivel de abstracción.
+
+\noindent\textbf{Participantes}
+
+\begin{itemize}
+  \item El desarrollador
+  \item El \textit{toolchain} que podrá correr pruebas automáticamente
+\end{itemize}
+
+\noindent\textbf{Metodología}
+
+
+\begin{itemize}
+  \item Los componentes que ejecutan un algoritmo de alto nivel como CMAC se separa (DUT) en un \textit{testbench} UVM
+  \item Se definen los estímulos para el algoritmo, utilizando un modelo de referencia
+  \item Se define la sequencia para transmitir los estímulos al DUT
+  \item Se ejecuta la simulación UVM
+  \item Se almacenan los resultados del scoreboard
+  \item El programa que ejecuta las pruebas determina si la prueba tiene éxito o no comparando los resultados con el modelo de referencia
+\end{itemize}
+
+\subsection{Pruebas de sistema}
+
+\noindent\textbf{Definición}
+Las pruebas de sistema se enfocan a la prueba del sistema a nivel de servicios, es decir, se prueba una interrupción al controlador principal en lugar de probar directamenete el algoritmo CMAC.
+
+\noindent\textbf{Participantes}
+
+\begin{itemize}
+  \item El desarrollador
+  \item El \textit{toolchain} que podrá correr pruebas automáticamente
+\end{itemize}
+
+\noindent\textbf{Metodología}
+
+
+\begin{itemize}
+  \item El sistema completo se separa como DUT en un \textit{testbench} UVM
+  \item Se definen los estímulos para el sistema como la interrupción y los argumentos del servicio criptográfico
+  \item Se define la sequencia para transmitir los estímulos al DUT
+  \item Se ejecuta la simulación UVM
+  \item Se almacenan los resultados del scoreboard
+  \item El programa que ejecuta las pruebas determina si la prueba tiene éxito o no comparando los resultados con el modelo de referencia y otros sistemas con la misma funcionalidad
+\end{itemize}
+
+\subsection{Análisis con herramientas \textit{Lint}}
+
+\noindent\textbf{Verilator}
+
+Verilator es una herramienta de análisis estático de código Verilog o SystemVerilog. Verilator se invoca con parámetros similares a \textit{gcc} o \textit{vlog} de Modelsim. El código Verilog o SystemVerilog sintetizable especificado como entrada es leído y se realizan comprobaciones de buenas prácticas, opcionalmente, se pueden insertar comprobaciones y puntos de análisis de cobertura.
+
+\noindent El siguiente es un ejemplo de la ejecución de Verilator sobre linux:
+%\begin{verbatim*}
+\begin{lstlisting}
+  $ verilator --lint-only -Wall file.v
+\end{lstlisting}
+%\end{verbatim*}
         
-% Optional bibliography section
-% To use bibliograpy, first provide the ipprocess.bib file on the root folder.
 \newpage
 \bibliographystyle{ieeetr}
 \bibliography{bibliography}
